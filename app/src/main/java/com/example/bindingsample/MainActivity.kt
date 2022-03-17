@@ -9,7 +9,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.bindingsample.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
+
+// link tham khảo flow:
+//https://tech.miichisoft.net/ket-hop-flow-trong-coroutine-android/
+// https://kotlinlang.org/docs/channels.html
+//https://viblo.asia/p/cung-hoc-kotlin-coroutine-phan-11-channels-part-1-of-2-bJzKmJpXZ9N
+//https://viblo.asia/p/cung-hoc-kotlin-coroutine-phan-7-xu-ly-exception-trong-coroutine-supervision-job-supervision-scope-naQZRDaG5vx
 
 @InternalCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -43,6 +50,87 @@ class MainActivity : AppCompatActivity() {
         binding.txtName = "test binding"
         binding.editName = "alo 123"
         main()
+    }
+
+    fun channelThreadError() = runBlocking {
+        val channel = Channel<Int>()
+        val job = launch {
+            for (x in 1..5) {
+                channel.send(x * x)
+            }
+        }
+
+        println("Done! Coroutine is completed?: ${job.isCompleted} / Coroutine is active?: ${job.isActive}")
+    }
+
+    fun channelThreadError2() = runBlocking {
+        val channel = Channel<Int>()
+        val job = launch {
+            for (x in 1..5) {
+                channel.send(x * x)
+            }
+        }
+
+        for (x in 1..10) {
+            println("Coroutine is completed?: ${job.isCompleted} / Coroutine is active?: ${job.isActive}")
+            println(channel.receive())
+        }
+        println("Done! Run blocking coroutine is active?: $isActive")
+    }
+
+    fun channelThread() = runBlocking {
+        val channel = Channel<Int>()
+        val job = launch {
+            for (x in 1..4) {
+                channel.send(x * x)
+            }
+        }
+        // print 5 giá trị, trước khi nhận cho delay 1s
+        delay(1000) // delay 1s
+        println(channel.receive()) // nhận giá trị thứ 1
+        delay(1000) // delay 1s
+        println(channel.receive()) // nhận giá trị thứ 2
+        delay(1000) // delay 1s
+        println(channel.receive()) // nhận giá trị thứ 3
+        delay(1000) // delay 1s
+        println(channel.receive()) // nhận giá trị thứ 4
+        delay(1000) // delay 1s
+//        println(channel.receive()) // nhận giá trị thứ 5
+        println("Done! Channel is empty?: ${channel.isEmpty} / Coroutine is completed?: ${job.isCompleted} / Coroutine is active?: ${job.isActive}")
+    }
+
+    fun channelThread2() = runBlocking {
+        val channel = Channel<Int>()
+        launch {
+            for (x in 1..5) channel.send(x * x)
+            channel.close() // we're done sending
+        }
+        // here we print received values using `for` loop (until the channel is closed)
+        for (value in channel) println(value)
+        println("Done!")
+    }
+
+    //
+//    private fun launchIn() = runBlocking {
+//        (1..2).asFlow()
+//            .onEach {
+//                delay(1000)
+//            }.collect {
+//                println(it)
+//            }
+//        println("DONE")
+//    }
+
+    private fun launchIn() = runBlocking { // xử lý song song
+        val job = (1..20).asFlow()
+            .onEach {
+                delay(1000)
+                println(it)
+            }.launchIn(this)
+        println("delay 5s")
+        delay(5000)
+        println("cancel")
+        job.cancel()
     }
 
     public fun onClickDelay(view: View){
@@ -94,15 +182,19 @@ class MainActivity : AppCompatActivity() {
 //                println("onEach: $it")
 //            }
 //        }
-        val flowOne = flowOf("Himanshu", "Amit", "Janishar").flowOn(Dispatchers.Default)
-        val flowTwo = flowOf("Singh", "Shekhar", "Ali").flowOn(Dispatchers.Default)
-        CoroutineScope(Dispatchers.Main).launch {
-            flowOne.zip(flowTwo) { firstString, secondString ->
-                "$firstString $secondString"
-            }.collect {
-                println("onEach: $it")
-            }
-        }
+//        val flowOne = flowOf("Himanshu", "Amit", "Janishar").flowOn(Dispatchers.Default)
+//        val flowTwo = flowOf("Singh", "Shekhar", "Ali").flowOn(Dispatchers.Default)
+//        CoroutineScope(Dispatchers.Main).launch {
+//            flowOne.zip(flowTwo) { firstString, secondString ->
+//                "$firstString $secondString"
+//            }.collect {
+//                println("onEach: $it")
+//            }
+//        }
+//                channelThread()
+//        channelThreadError()
+//        channelThreadError2()
+        channelThread2()
     }
 
     private fun startFlow() = flow {
