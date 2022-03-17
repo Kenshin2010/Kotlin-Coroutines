@@ -9,10 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.example.bindingsample.databinding.ActivityMainBinding
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 @InternalCoroutinesApi
 class MainActivity : AppCompatActivity() {
@@ -89,9 +86,21 @@ class MainActivity : AppCompatActivity() {
 //        lifecycleScope.launch {
 //            startFlow()
 //        }
-        CoroutineScope(Dispatchers.IO).launch {
-            startFlow().collect {
-                println("count: $it")
+//        CoroutineScope(Dispatchers.IO).launch {
+//            startFlow().collect {
+//                println("count: $it")
+//            }
+//            setupFlow().collect {
+//                println("onEach: $it")
+//            }
+//        }
+        val flowOne = flowOf("Himanshu", "Amit", "Janishar").flowOn(Dispatchers.Default)
+        val flowTwo = flowOf("Singh", "Shekhar", "Ali").flowOn(Dispatchers.Default)
+        CoroutineScope(Dispatchers.Main).launch {
+            flowOne.zip(flowTwo) { firstString, secondString ->
+                "$firstString $secondString"
+            }.collect {
+                println("onEach: $it")
             }
         }
     }
@@ -104,6 +113,19 @@ class MainActivity : AppCompatActivity() {
             emit(it)
         }
     }.flowOn(Dispatchers.IO)
+
+//    private fun setupFlow() = (1..5).asFlow()
+//        .onEach{
+//            delay(300)
+//        }
+//        .flowOn(Dispatchers.Default)
+
+    @ExperimentalCoroutinesApi
+    private fun setupFlow() = channelFlow {
+        (0..10).forEach {
+            send(it)
+        }
+    }.flowOn(Dispatchers.Default)
 
     private fun test() = runBlocking {
         val startTime = System.currentTimeMillis()
