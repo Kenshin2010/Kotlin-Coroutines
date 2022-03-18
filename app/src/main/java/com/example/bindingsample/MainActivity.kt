@@ -12,6 +12,9 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
+// link collection cho kotlin
+//https://viblo.asia/p/kotlin-collection-XL6lAyeBlek
+
 // link tham khảo flow:
 //https://tech.miichisoft.net/ket-hop-flow-trong-coroutine-android/
 // https://kotlinlang.org/docs/channels.html
