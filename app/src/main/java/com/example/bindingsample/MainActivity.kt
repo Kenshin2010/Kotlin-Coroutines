@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.*
 //https://viblo.asia/p/cung-hoc-kotlin-coroutine-phan-11-channels-part-1-of-2-bJzKmJpXZ9N
 //https://viblo.asia/p/cung-hoc-kotlin-coroutine-phan-7-xu-ly-exception-trong-coroutine-supervision-job-supervision-scope-naQZRDaG5vx
 
+// sử dụng  LifecycleCoroutineScope để quản lý vòng đời cho Flow
+
 @InternalCoroutinesApi
 class MainActivity : AppCompatActivity() {
 
