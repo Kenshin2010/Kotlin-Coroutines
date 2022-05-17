@@ -4,16 +4,6 @@ NOTE : GIẢI PHAP THAY THẾ CHO EVENTBUS
 
 
 
-
-
-
-
-
-
-
-
-
-
 ==================================================
 class EventBus {
     private val _events = MutableSharedFlow<AppEvent>()
@@ -31,7 +21,6 @@ class EventBus {
   
   ============================
   eventBus.emitEvent(AppEvent.CONNECTION_RECONNECTED)
-  ============================
   eventBus.events
     .filter { it == AppEvent.CONNECTION_RECONNECTED }
     .collectLatest { handleReconnection() }
