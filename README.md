@@ -3,6 +3,7 @@
 NOTE : GIẢI PHAP THAY THẾ CHO EVENTBUS
 
 class EventBus {
+
     private val _events = MutableSharedFlow<String>()
     val events = _events.asSharedFlow()
     
