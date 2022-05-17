@@ -1,6 +1,19 @@
 # Kotlin-Coroutines
 
 NOTE : GIẢI PHAP THAY THẾ CHO EVENTBUS
+
+
+
+
+
+
+
+
+
+
+
+
+
 ==================================================
 class EventBus {
     private val _events = MutableSharedFlow<AppEvent>()
