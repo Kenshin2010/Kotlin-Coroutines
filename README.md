@@ -18,9 +18,14 @@ class EventBus {
         private const val TAG = "EventBus"
     }
 }
+  private fun send(){
+    eventBus.emitEvent(AppEvent.CONNECTION_RECONNECTED)
+  }
   
-  ============================
-  eventBus.emitEvent(AppEvent.CONNECTION_RECONNECTED)
-  eventBus.events
+  private fun receiver(){
+    eventBus.events
     .filter { it == AppEvent.CONNECTION_RECONNECTED }
     .collectLatest { handleReconnection() }
+  }
+  
+    
