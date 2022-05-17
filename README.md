@@ -16,9 +16,9 @@ class EventBus {
     }
 }
   
-  ============================================
+  ============================
   eventBus.emitEvent(AppEvent.CONNECTION_RECONNECTED)
-  ============================================
+  ============================
   eventBus.events
     .filter { it == AppEvent.CONNECTION_RECONNECTED }
     .collectLatest { handleReconnection() }
