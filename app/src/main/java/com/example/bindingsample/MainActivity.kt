@@ -12,6 +12,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 
+
+
+// Study kotlin 
+// https://medium.com/androiddevelopers/31daysofkotlin-week-2-recap-9eedcd18ef8
+//======================================
 // link collection cho kotlin
 //https://viblo.asia/p/kotlin-collection-XL6lAyeBlek
 
